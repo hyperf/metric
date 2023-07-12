@@ -2,25 +2,30 @@
 
 declare(strict_types=1);
 /**
- * This file is part of Hyperf.
+ * This file is part of Hyperf + OpenCodeCo
  *
- * @link     https://www.hyperf.io
+ * @link     https://opencodeco.dev
  * @document https://hyperf.wiki
- * @contact  group@hyperf.io
- * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
+ * @contact  leo@opencodeco.dev
+ * @license  https://github.com/opencodeco/hyperf-metric/blob/main/LICENSE
  */
 namespace Hyperf\Metric;
 
 use Domnikl\Statsd\Connection;
-use Domnikl\Statsd\Connection\UdpSocket;
+use Hyperf\Metric\Adapter\StatsD\Connection as StatsDConnection;
 use Hyperf\Metric\Aspect\CounterAnnotationAspect;
 use Hyperf\Metric\Aspect\HistogramAnnotationAspect;
+use Hyperf\Metric\Aspect\HttpClientMetricAspect;
+use Hyperf\Metric\Aspect\MongoCollectionMetricAspect;
+use Hyperf\Metric\Aspect\RedisMetricAspect;
 use Hyperf\Metric\Contract\MetricFactoryInterface;
+use Hyperf\Metric\Listener\DbQueryExecutedMetricListener;
 use Hyperf\Metric\Listener\OnBeforeHandle;
 use Hyperf\Metric\Listener\OnCoroutineServerStart;
 use Hyperf\Metric\Listener\OnMetricFactoryReady;
 use Hyperf\Metric\Listener\OnPipeMessage;
 use Hyperf\Metric\Listener\OnWorkerStart;
+use Hyperf\Metric\Middleware\MetricMiddleware;
 use Hyperf\Metric\Process\MetricProcess;
 use InfluxDB\Driver\DriverInterface;
 use InfluxDB\Driver\Guzzle;
@@ -35,12 +40,15 @@ class ConfigProvider
             'dependencies' => [
                 MetricFactoryInterface::class => MetricFactoryPicker::class,
                 Adapter::class => InMemory::class,
-                Connection::class => UdpSocket::class,
+                Connection::class => StatsDConnection::class,
                 DriverInterface::class => Guzzle::class,
             ],
             'aspects' => [
                 CounterAnnotationAspect::class,
                 HistogramAnnotationAspect::class,
+                HttpClientMetricAspect::class,
+                MongoCollectionMetricAspect::class,
+                RedisMetricAspect::class,
             ],
             'publish' => [
                 [
@@ -51,11 +59,15 @@ class ConfigProvider
                 ],
             ],
             'listeners' => [
+                DbQueryExecutedMetricListener::class,
                 OnPipeMessage::class,
                 OnMetricFactoryReady::class,
                 OnBeforeHandle::class,
                 OnWorkerStart::class,
                 OnCoroutineServerStart::class,
+            ],
+            'middlewares' => [
+                MetricMiddleware::class,
             ],
             'processes' => [
                 MetricProcess::class,

@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 /**
- * This file is part of Hyperf.
+ * This file is part of Hyperf + OpenCodeCo
  *
- * @link     https://www.hyperf.io
+ * @link     https://opencodeco.dev
  * @document https://hyperf.wiki
- * @contact  group@hyperf.io
- * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
+ * @contact  leo@opencodeco.dev
+ * @license  https://github.com/opencodeco/hyperf-metric/blob/main/LICENSE
  */
 namespace Hyperf\Metric\Middleware;
 
-use Hyperf\HttpMessage\Exception\HttpException;
 use Hyperf\HttpServer\Router\Dispatched;
-use Hyperf\Metric\CoroutineServerStats;
+use Hyperf\Metric\Metric;
+use Hyperf\Metric\Support\Uri;
 use Hyperf\Metric\Timer;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -23,10 +23,6 @@ use Throwable;
 
 class MetricMiddleware implements MiddlewareInterface
 {
-    public function __construct(protected CoroutineServerStats $stats)
-    {
-    }
-
     /**
      * Process an incoming server request.
      * Processes an incoming server request in order to produce a response.
@@ -36,43 +32,50 @@ class MetricMiddleware implements MiddlewareInterface
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $labels = [
-            'request_status' => '500', // default to 500 in case uncaught exception occur
+            'request_status' => '500',
             'request_path' => $this->getPath($request),
             'request_method' => $request->getMethod(),
         ];
-        $timer = new Timer('http_requests', $labels);
 
-        ++$this->stats->accept_count;
-        ++$this->stats->request_count;
-        ++$this->stats->connection_num;
+        $timer = new Timer('http_requests', $labels);
 
         try {
             $response = $handler->handle($request);
             $labels['request_status'] = (string) $response->getStatusCode();
-        } catch (Throwable $exception) {
-            if ($exception instanceof HttpException) {
-                $labels['request_status'] = (string) $exception->getStatusCode();
-            }
-            throw $exception;
-        } finally {
             $timer->end($labels);
-            ++$this->stats->close_count;
-            ++$this->stats->response_count;
-            --$this->stats->connection_num;
-        }
 
-        return $response;
+            return $response;
+        } catch (Throwable $exception) {
+            $this->countException($request, $exception);
+            $timer->end($labels);
+
+            throw $exception;
+        }
     }
 
     protected function getPath(ServerRequestInterface $request): string
     {
         $dispatched = $request->getAttribute(Dispatched::class);
         if (! $dispatched) {
-            return $request->getUri()->getPath();
+            return Uri::sanitize($request->getUri()->getPath());
         }
         if (! $dispatched->handler) {
             return 'not_found';
         }
         return $dispatched->handler->route;
+    }
+
+    protected function countException(ServerRequestInterface $request, Throwable $exception): void
+    {
+        $labels = [
+            'request_path' => $this->getPath($request),
+            'request_method' => $request->getMethod(),
+            'class' => $exception::class,
+            'message' => $exception->getMessage(),
+            'code' => (string) $exception->getCode(),
+            'line' => (string) $exception->getLine(),
+        ];
+
+        Metric::count('exception_count', 1, $labels);
     }
 }

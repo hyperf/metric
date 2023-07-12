@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 /**
- * This file is part of Hyperf.
+ * This file is part of Hyperf + OpenCodeCo
  *
- * @link     https://www.hyperf.io
+ * @link     https://opencodeco.dev
  * @document https://hyperf.wiki
- * @contact  group@hyperf.io
- * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
+ * @contact  leo@opencodeco.dev
+ * @license  https://github.com/opencodeco/hyperf-metric/blob/main/LICENSE
  */
 namespace Hyperf\Metric\Adapter\StatsD;
 
@@ -92,7 +92,7 @@ class MetricFactory implements MetricFactoryInterface
         $host = $this->config->get("metric.metric.{$name}.udp_host");
         $port = $this->config->get("metric.metric.{$name}.udp_port");
         $timeout = $this->config->get("metric.metric.{$name}.timeout");
-        $persistent = $this->config->get("metric.metric.{$name}.persistent", true);
+        $persistent = $this->config->get("metric.metric.{$name}.persistent", false);
         return make(Connection::class, [
             'host' => $host,
             'port' => (int) $port,

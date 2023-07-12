@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 /**
- * This file is part of Hyperf.
+ * This file is part of Hyperf + OpenCodeCo
  *
- * @link     https://www.hyperf.io
+ * @link     https://opencodeco.dev
  * @document https://hyperf.wiki
- * @contact  group@hyperf.io
- * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
+ * @contact  leo@opencodeco.dev
+ * @license  https://github.com/opencodeco/hyperf-metric/blob/main/LICENSE
  */
 use Hyperf\Metric\Adapter\Prometheus\Constants;
 
@@ -16,7 +16,7 @@ use function Hyperf\Support\env;
 return [
     // To disable hyperf/metric temporarily, set default driver to noop.
     'default' => env('METRIC_DRIVER', 'prometheus'),
-    'use_standalone_process' => env('METRIC_USE_STANDALONE_PROCESS', true),
+    'use_standalone_process' => env('METRIC_USE_STANDALONE_PROCESS', false),
     'enable_default_metric' => env('METRIC_ENABLE_DEFAULT_METRIC', true),
     'default_metric_interval' => env('DEFAULT_METRIC_INTERVAL', 5),
     'metric' => [
@@ -40,7 +40,7 @@ return [
             'udp_host' => env('STATSD_UDP_HOST', '127.0.0.1'),
             'udp_port' => env('STATSD_UDP_PORT', '8125'),
             'timeout' => env('STATSD_CONNECTION_TIMEOUT', null),
-            'persistent' => env('STATSD_CONNECTION_PERSISTENT', true),
+            'persistent' => env('STATSD_CONNECTION_PERSISTENT', false),
             'enable_batch' => env('STATSD_ENABLE_BATCH', true),
             'push_interval' => env('STATSD_PUSH_INTERVAL', 5),
             'sample_rate' => env('STATSD_SAMPLE_RATE', 1.0),
