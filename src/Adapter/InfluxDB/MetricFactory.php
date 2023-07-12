@@ -119,7 +119,7 @@ class MetricFactory implements MetricFactoryInterface
     {
         return new Point(
             $sample->getName(),
-            $sample->getValue(),
+            (float) $sample->getValue(),
             $labels = array_combine($sample->getLabelNames(), $sample->getLabelValues()),
             [],
             time()

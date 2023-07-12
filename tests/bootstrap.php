@@ -9,4 +9,6 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
-require_once dirname(__DIR__) . '/vendor/autoload.php';
+define('BASE_PATH', dirname(__DIR__, 1));
+
+require_once BASE_PATH . '/vendor/autoload.php';

@@ -63,6 +63,10 @@ class Redis implements Adapter
         );
     }
 
+    public function updateSummary(array $data): void
+    {
+    }
+
     /**
      * @throws RedisException
      */
