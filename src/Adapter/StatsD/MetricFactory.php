@@ -21,6 +21,7 @@ use Hyperf\Metric\Contract\GaugeInterface;
 use Hyperf\Metric\Contract\HistogramInterface;
 use Hyperf\Metric\Contract\MetricFactoryInterface;
 
+use function Hyperf\Support\env;
 use function Hyperf\Support\make;
 
 class MetricFactory implements MetricFactoryInterface
@@ -38,32 +39,32 @@ class MetricFactory implements MetricFactoryInterface
 
     public function makeCounter(string $name, ?array $labelNames = []): CounterInterface
     {
-        return new Counter(
+        return (new Counter(
             $this->client,
             $name,
             $this->getSampleRate(),
-            $labelNames
-        );
+            array_merge(['service.name', 'host.name'], $labelNames),
+        ))->with($this->getNamespace(), $this->getHostname());
     }
 
     public function makeGauge(string $name, ?array $labelNames = []): GaugeInterface
     {
-        return new Gauge(
+        return (new Gauge(
             $this->client,
             $name,
             $this->getSampleRate(),
-            $labelNames
-        );
+            array_merge(['service.name', 'host.name'], $labelNames),
+        ))->with($this->getNamespace(), $this->getHostname());
     }
 
     public function makeHistogram(string $name, ?array $labelNames = []): HistogramInterface
     {
-        return new Histogram(
+        return (new Histogram(
             $this->client,
             $name,
             $this->getSampleRate(),
-            $labelNames
-        );
+            array_merge(['service.name', 'host.name'], $labelNames),
+        ))->with($this->getNamespace(), $this->getHostname());
     }
 
     public function handle(): void
@@ -111,5 +112,10 @@ class MetricFactory implements MetricFactoryInterface
     {
         $name = $this->config->get('metric.default');
         return $this->config->get("metric.metric.{$name}.sample_rate", 1.0);
+    }
+
+    protected function getHostname(): string
+    {
+        return $this->config->get('hostname', env('HOSTNAME'));
     }
 }
