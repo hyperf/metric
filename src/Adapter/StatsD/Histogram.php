@@ -34,7 +34,7 @@ class Histogram implements HistogramInterface
 
     public function with(string ...$labelValues): static
     {
-        $this->labelValues = $labelValues;
+        $this->labelValues = array_merge($this->labelValues, $labelValues);
         return $this;
     }
 
