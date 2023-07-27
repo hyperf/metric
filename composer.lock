@@ -1120,16 +1120,16 @@
         },
         {
             "name": "hyperf/stringable",
-            "version": "v3.0.27",
+            "version": "v3.0.31",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hyperf/stringable.git",
-                "reference": "cd56584d5d7a2688e1c1a401c3c41c0a8143a920"
+                "reference": "1bcea1466a87267c780cd67df05de0127c237dcd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hyperf/stringable/zipball/cd56584d5d7a2688e1c1a401c3c41c0a8143a920",
-                "reference": "cd56584d5d7a2688e1c1a401c3c41c0a8143a920",
+                "url": "https://api.github.com/repos/hyperf/stringable/zipball/1bcea1466a87267c780cd67df05de0127c237dcd",
+                "reference": "1bcea1466a87267c780cd67df05de0127c237dcd",
                 "shasum": ""
             },
             "require": {
@@ -1176,7 +1176,7 @@
                 "pull-request": "https://github.com/hyperf/hyperf/pulls",
                 "source": "https://github.com/hyperf/hyperf"
             },
-            "time": "2023-06-25T06:10:37+00:00"
+            "time": "2023-07-25T12:44:39+00:00"
         },
         {
             "name": "hyperf/support",
