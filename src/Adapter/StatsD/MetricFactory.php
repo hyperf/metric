@@ -116,6 +116,6 @@ class MetricFactory implements MetricFactoryInterface
 
     protected function getHostname(): string
     {
-        return $this->config->get('hostname', env('HOSTNAME'));
+        return $this->config->get('hostname', env('HOSTNAME', env('APP_NAME')));
     }
 }
