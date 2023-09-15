@@ -28,7 +28,7 @@ final class Uri
                 '/<OID>',
                 '/<NUMBER>',
             ],
-            $uri
+            '/' . ltrim($uri, '/'),
         );
     }
 }

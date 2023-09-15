@@ -78,4 +78,14 @@ final class UriTest extends TestCase
         self::assertSame('/v7/test/<OID>/<OID>/<OID>', Uri::sanitize("/v7/test/{$oid}/{$oid}/{$oid}"));
         self::assertSame('/v8/test/<OID>/<OID>/<OID>/', Uri::sanitize("/v8/test/{$oid}/{$oid}/{$oid}/"));
     }
+
+    public function testAddsInitialSlash(): void
+    {
+        self::assertSame('/v1/', Uri::sanitize('/v1/'));
+        self::assertSame('/v1', Uri::sanitize('v1'));
+        self::assertSame('/v1/', Uri::sanitize('v1/'));
+        self::assertSame('/v1/test/', Uri::sanitize('/v1/test/'));
+        self::assertSame('/v1/test', Uri::sanitize('v1/test'));
+        self::assertSame('/v1/test/', Uri::sanitize('v1/test/'));
+    }
 }
