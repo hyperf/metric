@@ -9,7 +9,7 @@ declare(strict_types=1);
  * @contact  leo@opencodeco.dev
  * @license  https://github.com/opencodeco/hyperf-metric/blob/main/LICENSE
  */
-namespace HyperfTest\Metric\Support;
+namespace HyperfTest\Metric\Cases;
 
 use Hyperf\Metric\Support\Uri;
 use PHPUnit\Framework\TestCase;
