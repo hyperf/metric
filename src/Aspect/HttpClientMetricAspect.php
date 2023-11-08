@@ -45,7 +45,7 @@ class HttpClientMetricAspect implements AroundInterface
         $host = $base_uri === null ? (parse_url($uri, PHP_URL_HOST) ?? '') : $base_uri->getHost();
 
         $labels = [
-            'uri' => SupportUri::sanitize(parse_url($uri, PHP_URL_PATH)),
+            'uri' => SupportUri::sanitize(parse_url($uri, PHP_URL_PATH) ?? '/'),
             'host' => $host,
             'method' => $method,
             'http_status_code' => '200',
