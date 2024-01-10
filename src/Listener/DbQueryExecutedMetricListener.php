@@ -14,11 +14,16 @@ namespace Hyperf\Metric\Listener;
 use Hyperf\Database\Events\QueryExecuted;
 use Hyperf\Event\Contract\ListenerInterface;
 use Hyperf\Metric\Contract\MetricFactoryInterface;
+use Hyperf\Metric\Contract\SqlSanitizerInterface;
 
 use function Hyperf\Support\make;
 
 class DbQueryExecutedMetricListener implements ListenerInterface
 {
+    public function __construct(private SqlSanitizerInterface $sqlSanitizer)
+    {
+    }
+
     public function listen(): array
     {
         return [QueryExecuted::class];
@@ -32,7 +37,7 @@ class DbQueryExecutedMetricListener implements ListenerInterface
 
         $labels = [
             'system' => 'mysql',
-            'operation' => $event->sql,
+            'operation' => $this->sqlSanitizer->sanitize($event->sql),
         ];
 
         $histogram = make(MetricFactoryInterface::class)

@@ -19,6 +19,7 @@ use Hyperf\Metric\Aspect\HttpClientMetricAspect;
 use Hyperf\Metric\Aspect\MongoCollectionMetricAspect;
 use Hyperf\Metric\Aspect\RedisMetricAspect;
 use Hyperf\Metric\Contract\MetricFactoryInterface;
+use Hyperf\Metric\Contract\SqlSanitizerInterface;
 use Hyperf\Metric\Listener\DbQueryExecutedMetricListener;
 use Hyperf\Metric\Listener\OnBeforeHandle;
 use Hyperf\Metric\Listener\OnCoroutineServerStart;
@@ -27,6 +28,7 @@ use Hyperf\Metric\Listener\OnPipeMessage;
 use Hyperf\Metric\Listener\OnWorkerStart;
 use Hyperf\Metric\Middleware\MetricMiddleware;
 use Hyperf\Metric\Process\MetricProcess;
+use Hyperf\Metric\Support\SqlSanitizer;
 use InfluxDB\Driver\DriverInterface;
 use InfluxDB\Driver\Guzzle;
 use Prometheus\Storage\Adapter;
@@ -42,6 +44,7 @@ class ConfigProvider
                 Adapter::class => InMemory::class,
                 Connection::class => StatsDConnection::class,
                 DriverInterface::class => Guzzle::class,
+                SqlSanitizerInterface::class => SqlSanitizer::class,
             ],
             'aspects' => [
                 CounterAnnotationAspect::class,
