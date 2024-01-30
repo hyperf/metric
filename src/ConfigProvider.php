@@ -21,6 +21,9 @@ use Hyperf\Metric\Aspect\RedisMetricAspect;
 use Hyperf\Metric\Contract\MetricFactoryInterface;
 use Hyperf\Metric\Contract\SqlSanitizerInterface;
 use Hyperf\Metric\Listener\DbQueryExecutedMetricListener;
+use Hyperf\Metric\Adapter\RemoteProxy\MetricCollectorFactory;
+use Hyperf\Metric\Contract\MetricCollectorInterface;
+use Hyperf\Metric\Listener\MetricBufferWatcher;
 use Hyperf\Metric\Listener\OnBeforeHandle;
 use Hyperf\Metric\Listener\OnCoroutineServerStart;
 use Hyperf\Metric\Listener\OnMetricFactoryReady;
@@ -45,6 +48,7 @@ class ConfigProvider
                 Connection::class => StatsDConnection::class,
                 DriverInterface::class => Guzzle::class,
                 SqlSanitizerInterface::class => SqlSanitizer::class,
+                MetricCollectorInterface::class => MetricCollectorFactory::class,
             ],
             'aspects' => [
                 CounterAnnotationAspect::class,
@@ -68,6 +72,7 @@ class ConfigProvider
                 OnBeforeHandle::class,
                 OnWorkerStart::class,
                 OnCoroutineServerStart::class,
+                MetricBufferWatcher::class,
             ],
             'middlewares' => [
                 MetricMiddleware::class,
