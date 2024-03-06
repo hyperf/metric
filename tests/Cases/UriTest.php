@@ -88,4 +88,15 @@ final class UriTest extends TestCase
         self::assertSame('/v1/test', Uri::sanitize('v1/test'));
         self::assertSame('/v1/test/', Uri::sanitize('v1/test/'));
     }
+
+    public function testAndroidId(): void
+    {
+        self::assertSame('/device/<ANDROID-ID>/user/<NUMBER>', Uri::sanitize('/devices/a436d9ffefef80e8/user/999'));
+        self::assertSame('/device/<ANDROID-ID>/user/<NUMBER>', Uri::sanitize('/devices/7b5d68f217d90ff5/user/999'));
+        self::assertSame('/device/<ANDROID-ID>/user/<NUMBER>', Uri::sanitize('/devices/dc900fb903cc308c/user/999'));
+        self::assertSame('/device/<ANDROID-ID>/user/<NUMBER>', Uri::sanitize('/devices/86d144c9078c8176/user/999'));
+        self::assertSame('/device/<ANDROID-ID>/user/<NUMBER>', Uri::sanitize('/devices/918F394F-2470-43CA-9237-F436F36E40BB/user/8045169'));
+        self::assertSame('/device/<ANDROID-ID>/user/<NUMBER>', Uri::sanitize('/devices/918F394F-2470-43CA-9237-F436F36E40BB/user/8045169'));
+        self::assertSame('/device/<ANDROID-ID>/user/<NUMBER>', Uri::sanitize('/devices/86d144c9078c8176/user/8045169'));
+    }
 }
