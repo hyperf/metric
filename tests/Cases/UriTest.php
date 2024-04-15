@@ -68,6 +68,7 @@ final class UriTest extends TestCase
     public function testClearUriOids(): void
     {
         $oid = '650229807612bba4984d1fc7';
+        $oidShort = '714eab67ba7b0b32';
 
         self::assertSame('/v1/test', Uri::sanitize('/v1/test'));
         self::assertSame('/v2/test/<OID>', Uri::sanitize("/v2/test/{$oid}"));
@@ -77,6 +78,7 @@ final class UriTest extends TestCase
         self::assertSame('/v6/test/<OID>/<OID>/', Uri::sanitize("/v6/test/{$oid}/{$oid}/"));
         self::assertSame('/v7/test/<OID>/<OID>/<OID>', Uri::sanitize("/v7/test/{$oid}/{$oid}/{$oid}"));
         self::assertSame('/v8/test/<OID>/<OID>/<OID>/', Uri::sanitize("/v8/test/{$oid}/{$oid}/{$oid}/"));
+        self::assertSame('/v9/test/<OID>/bar/<OID>', Uri::sanitize("/v4/test/{$oidShort}/bar/1234"));
     }
 
     public function testAddsInitialSlash(): void
