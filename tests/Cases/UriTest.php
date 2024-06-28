@@ -99,4 +99,23 @@ final class UriTest extends TestCase
         self::assertSame('/device/<ANDROID-ID>/user/<NUMBER>', Uri::sanitize('/devices/86d144c9078c8176/user/999'));
         self::assertSame('/device/<ANDROID-ID>/user/<NUMBER>', Uri::sanitize('/devices/86d144c9078c8176/user/8045169'));
     }
+
+    public function testSanitizeHashsStrings(): void
+    {
+        self::assertSame('/v1/test', Uri::sanitize('/v1/test'));
+        self::assertSame('/v2/test/<SHA1>', Uri::sanitize('/v2/test/141da78905dcaa7ed8d4da7c3f49a2415ebdc110'));
+        self::assertSame('/v2/test/<SHA1>', Uri::sanitize('/v2/test/7110EDA4D09E062AA5E4A390B0A572AC0D2C0220'));
+        self::assertSame('/v3/test/<SHA1>/bar', Uri::sanitize('/v3/test/81FE8BFE87576C3ECB22426F8E57847382917ACF/bar'));
+        self::assertSame('/v3/test/<SHA1>/bar', Uri::sanitize('/v3/test/7110EDA4D09E062AA5E4A390B0A572AC0D2C0220/bar'));
+        self::assertSame('/v4/test/<SHA1>/bar/<SHA1>/', Uri::sanitize('/v4/test/141da78905dcaa7ed8d4da7c3f49a2415ebdc110/bar/141da78905dcaa7ed8d4da7c3f49a2415ebdc110/'));
+        self::assertSame('/v4/test/<SHA1>/bar/<SHA1>/', Uri::sanitize('/v4/test/7110EDA4D09E062AA5E4A390B0A572AC0D2C0220/bar/7110EDA4D09E062AA5E4A390B0A572AC0D2C0220/'));
+        self::assertSame('/v5/test/<SHA1>/<SHA1>', Uri::sanitize('/v5/test/141da78905dcaa7ed8d4da7c3f49a2415ebdc110/141da78905dcaa7ed8d4da7c3f49a2415ebdc110'));
+        self::assertSame('/v5/test/<SHA1>/<SHA1>', Uri::sanitize('/v5/test/7110EDA4D09E062AA5E4A390B0A572AC0D2C0220/7110EDA4D09E062AA5E4A390B0A572AC0D2C0220'));
+        self::assertSame('/v6/test/<SHA1>/<SHA1>/', Uri::sanitize('/v6/test/141da78905dcaa7ed8d4da7c3f49a2415ebdc110/141da78905dcaa7ed8d4da7c3f49a2415ebdc110/'));
+        self::assertSame('/v6/test/<SHA1>/<SHA1>/', Uri::sanitize('/v6/test/7110EDA4D09E062AA5E4A390B0A572AC0D2C0220/7110EDA4D09E062AA5E4A390B0A572AC0D2C0220/'));
+        self::assertSame('/v7/test/<SHA1>/<SHA1>/<SHA1>', Uri::sanitize('/v7/test/141da78905dcaa7ed8d4da7c3f49a2415ebdc110/141da78905dcaa7ed8d4da7c3f49a2415ebdc110/141da78905dcaa7ed8d4da7c3f49a2415ebdc110'));
+        self::assertSame('/v7/test/<SHA1>/<SHA1>/<SHA1>', Uri::sanitize('/v7/test/7110EDA4D09E062AA5E4A390B0A572AC0D2C0220/7110EDA4D09E062AA5E4A390B0A572AC0D2C0220/7110EDA4D09E062AA5E4A390B0A572AC0D2C0220'));
+        self::assertSame('/v8/test/<SHA1>/<SHA1>/<SHA1>/', Uri::sanitize('/v8/test/141da78905dcaa7ed8d4da7c3f49a2415ebdc110/141da78905dcaa7ed8d4da7c3f49a2415ebdc110/141da78905dcaa7ed8d4da7c3f49a2415ebdc110/'));
+        self::assertSame('/v8/test/<SHA1>/<SHA1>/<SHA1>/', Uri::sanitize('/v8/test/7110EDA4D09E062AA5E4A390B0A572AC0D2C0220/7110EDA4D09E062AA5E4A390B0A572AC0D2C0220/7110EDA4D09E062AA5E4A390B0A572AC0D2C0220/'));
+    }
 }
